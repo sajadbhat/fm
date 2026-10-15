@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import NeuralCanvas from './components/NeuralCanvas';
 import TopBar from './components/TopBar';
 import Navbar from './components/Navbar';
@@ -17,6 +17,9 @@ import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 
 export default function App() {
+  const [theme, setTheme] = useState(() => (
+    window.localStorage.getItem('futurematics-theme') === 'light' ? 'light' : 'dark'
+  ));
   const [formData, setFormData] = useState({
     contactName: '',
     contactEmail: '',
@@ -25,6 +28,12 @@ export default function App() {
     contactDesc: '',
     contactNDA: false
   });
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    window.localStorage.setItem('futurematics-theme', theme);
+  }, [theme]);
 
   const handlePrefillContact = (promptText, domainTitle) => {
     setFormData((prev) => ({
@@ -43,7 +52,7 @@ export default function App() {
   };
 
   return (
-    <div className="bg-[#05070f] text-slate-100 relative min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="theme-shell relative min-h-screen selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Ambient Glow Orbs */}
       <div className="glow-orb glow-orb-cyan w-[550px] h-[550px] top-[-100px] left-1/2 -translate-x-1/2 opacity-40"></div>
       <div className="glow-orb glow-orb-purple w-[450px] h-[450px] top-[700px] left-[-150px] opacity-30"></div>
@@ -56,7 +65,7 @@ export default function App() {
       <TopBar />
 
       {/* Sticky Navbar */}
-      <Navbar />
+      <Navbar theme={theme} onThemeChange={setTheme} />
 
       <main className="relative z-10">
         <Hero />

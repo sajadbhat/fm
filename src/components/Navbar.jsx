@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { contactInfo } from '../data/siteData';
 
-export default function Navbar() {
+export default function Navbar({ theme, onThemeChange }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const toggleMobile = () => setMobileOpen(!mobileOpen);
   const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#05070f]/90 border-b border-white/[0.07]">
+    <header className="site-navbar sticky top-0 z-50 backdrop-blur-xl bg-[#05070f]/90 border-b border-white/[0.07]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Official Brand Logo */}
@@ -32,15 +32,37 @@ export default function Navbar() {
         </nav>
 
         {/* Header Action & Status */}
-        <div className="hidden lg:flex items-center gap-4">
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-            <span className="live-beacon"></span>
-            <span>Pune Lab: <strong className="text-emerald-400 font-semibold">Active</strong></span>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            aria-pressed={theme === 'light'}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? (
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <circle cx="12" cy="12" r="4" />
+                <path strokeLinecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+              </svg>
+            ) : (
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.2 15.6A8.5 8.5 0 0 1 8.4 3.8 8.5 8.5 0 1 0 20.2 15.6Z" />
+              </svg>
+            )}
+            <span className="sr-only">Switch to {theme === 'dark' ? 'light' : 'dark'} mode</span>
+          </button>
+          <div className="hidden lg:flex items-center gap-4">
+            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+              <span className="live-beacon"></span>
+              <span>Pune Lab: <strong className="text-emerald-400 font-semibold">Active</strong></span>
+            </div>
+            <a href="#contact" className="btn-glow text-xs py-2 px-4 inline-flex items-center gap-1.5">
+              <span>Schedule Consultation</span>
+              <span>&rarr;</span>
+            </a>
           </div>
-          <a href="#contact" className="btn-glow text-xs py-2 px-4 inline-flex items-center gap-1.5">
-            <span>Schedule Consultation</span>
-            <span>&rarr;</span>
-          </a>
         </div>
 
         {/* Mobile Hamburger Button */}
